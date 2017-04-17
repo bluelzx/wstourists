@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.WithDrawRecordMapper">
+	<resultMap id="tableWithDrawRecordMessage" type="com.yj.ws.pojo.WithDrawRecord">
+		<id column="record_id" property="recordId" />
+		<id column="record_clss" property="recordClss" />
+		<id column="record_momey" property="recordMomey" />
+		<id column="record_time" property="recordTime" />
+		<id column="record_state" property="recordState" />
+		<id column="handle_time" property="handleTime" />
+		<id column="user_id" property="userId" />
+		<id column="sysuser_id" property="sysuserId" />
+		<id column="remark" property="remark" />
+		<id column="fback1" property="fback1" />
+		<id column="inorout" property="inorout" />
+		<id column="account_id" property="accountId" /> 
+		<id column="caclss" property="caclss" />
+		<id column="phone_number" property="phone" />
+		<id column="card_number" property="cardNumber" />
+		<id column="account_class" property="accountClass" />
+	</resultMap>
+	<sql id="sqlcoulms">
+		record_id,record_clss,record_momey,DATE_FORMAT(record_time,'%Y-%m-%d %H:%i:%s') record_time,record_state,handle_time,
+		user_id,sysuser_id,remark,fback1,caclss
+	</sql>
+	<sql id="hsqlcoulms">
+		a.record_id,a.record_clss,a.record_momey,DATE_FORMAT(a.record_time,'%Y-%m-%d %H:%i:%s') record_time,a.record_state,a.handle_time,
+		a.user_id,a.sysuser_id,a.remark,a.fback1,b.phone_number,c.card_number,c.account_class,a.caclss
+	</sql>
+	<insert id="insertRecord" parameterType="com.yj.ws.pojo.WithDrawRecord">
+		<selectKey resultType="java.lang.Long" keyProperty="recordId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into withDrawRecord(
+			<include refid="insertcoulms" />
+		) values (
+			<include refid="inserttables" />
+		)
+		
+	</insert>
+	<select id="callAccount" parameterType="java.util.Map" statementType="CALLABLE"  resultType="java.util.Map">
+        
+		{call pay_withdraw(
+			#{userId,mode=IN,jdbcType=BIGINT},
+			#{money,mode=IN,jdbcType=DOUBLE},
+			#{rname,mode=IN,jdbcType=VARCHAR},
+			#{carCode,mode=IN,jdbcType=VARCHAR},
+			#{accountClass,mode=IN,jdbcType=INTEGER},
+			#{codes,mode=OUT,jdbcType=INTEGER}
+		)}
+
+	</select>
+	<update id="updateRecord" parameterType="com.yj.ws.pojo.WithDrawRecord">
+		update withDrawRecord 
+		<set>
+			<trim suffix="" suffixOverrides=",">
+				<if test="recordClss != null and recordClss != ''">
+					record_clss = #{recordClss},
+				</if>
+				<if test="recordMomey != null and recordMomey != ''">
+					record_momey = #{recordMomey},
+				</if>
+				<if test="recordState != null and recordState != ''">
+					record_state = #{recordState},
+				</if>
+				<if test="handleTime != null and handleTime != ''">
+					handle_time = #{handleTime},
+				</if>
+				<if test="sysuserId != null and sysuserId != ''">
+					sysuser_id = #{sysuserId},
+				</if>
+				<if test="remark != null and remark != ''">
+					remark = #{remark},
+				</if>
+				<if test="fback1 != null and fback1 != ''">
+					fback1 = #{fback1},
+				</if>
+				<if test="inorout != null and inorout != ''">
+					inorout = #{inorout},
+				</if>
+				<if test="accountId != null and accountId != ''">
+					account_id = #{account_id},
+				</if>
+				<if test="caclss != null and caclss != ''">
+					caclss = #{caclss},
+				</if>
+			</trim>
+		</set>
+		where 1=1
+		<if test="recordId != null and recordId != ''">
+				and	record_id = #{recordId} 
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+				and	fback1 = #{fback1}
+		</if> 
+	</update>
+	<select id="getRecordByClass" parameterType="com.yj.ws.pojo.WithDrawRecord" resultMap="tableWithDrawRecordMessage">
+		select <include refid="sqlcoulms" /> from withDrawRecord
+		where 1=1 
+		<if test="recordClss != null and recordClss != ''">
+			and record_clss=#{recordClss} 
+			<!-- <foreach collection="list" item="recordClss" index="index" open="(" close=")" separator=",">
+            	and record_clss in #{recordClss} 
+        	</foreach> -->
+		</if>
+		<if test="accountId != null and accountId != ''">
+			and account_id=#{accountId}    
+		</if>
+		<if test="inorout != null and inorout != ''">
+			and inorout=#{inorout}    <!-- 1收入，2支出 -->
+		</if>
+		<!-- <if test="startTime != null and startTime != ''">
+			and record_time &gt;=#{startTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and record_time &lt;=#{endTime} 
+		</if>
+		<if test="state != null and state != ''">
+			and record_state =#{state} 
+		</if> -->
+		<if test="userId != null and userId != ''">
+			and user_id =#{userId} 
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and fback1 = #{fback1} 
+		</if>
+		<if test="caclss != null and caclss != ''">
+			and caclss = #{caclss} 
+		</if>
+	</select>
+	<!-- 得到资金记录 -->
+	<select id="getRecord" parameterType="java.util.Map" resultMap="tableWithDrawRecordMessage">
+		select <include refid="sqlcoulms" /> from withDrawRecord 
+		where 1=1 
+		<if test="recordClss != null and recordClss != ''">
+			and record_clss=#{recordClss} 
+			<!-- <foreach collection="list" item="recordClss" index="index" open="(" close=")" separator=",">
+            	and record_clss in #{recordClss} 
+        	</foreach> -->
+		</if>
+		<if test="accountId != null and accountId != ''">
+			and account_id=#{accountId}    
+		</if>
+		<if test="inorout != null and inorout != ''">
+			and inorout=#{inorout}    <!-- 1收入，2支出 -->
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and record_time &gt;=#{startTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and record_time &lt;=#{endTime} 
+		</if>
+		<if test="state != null and state != ''">
+			and record_state =#{state} 
+		</if>
+		<if test="userId != null and userId != ''">
+			and user_id =#{userId} 
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and fback1 = #{fback1} 
+		</if>
+		<if test="caclss != null and caclss != ''">
+			and caclss = #{caclss} 
+		</if> order by record_id desc 
+		${pageUtil.limit} 
+	</select>
+	<!--得到用户最后一次签到金额-->
+	<select id="getlastMoney" parameterType="java.lang.Long" resultType="java.lang.Double">
+		select record_momey from withdrawrecord where 
+		record_id= ( SELECT case when MAX(record_id) is null  then 0 else MAX(record_id) end ids FROM withdrawrecord WHERE user_id= #{userId} and record_clss=2 )
+	</select>
+	<select id="getRecordCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(record_id) from withDrawRecord
+		where 1=1 
+		<if test="recordClss != null and recordClss != ''">
+			and record_clss=#{recordClss} 
+			<!-- <foreach collection="list" item="recordClss" index="index" open="(" close=")" separator=",">
+            	and record_clss in #{recordClss} 
+        	</foreach> -->
+		</if>
+		<if test="accountId != null and accountId != ''">
+			and account_id=#{accountId}    
+		</if>
+		<if test="inorout != null and inorout != ''">
+			and inorout=#{inorout}    <!-- 1收入，2支出 -->
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and record_time &gt;=#{startTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and record_time &lt;=#{endTime} 
+		</if>
+		<if test="userId != null and userId != ''">
+			and user_id = #{userId} 
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and fback1 = #{fback1} 
+		</if>
+		<if test="caclss != null and caclss != ''">
+			and caclss=#{caclss} 
+		</if>
+	</select>
+	
+	<sql id="insertcoulms">
+		<trim suffix="" suffixOverrides=",">
+			<if test="recordId != null and recordId != ''">
+				record_id,
+			</if>
+			<if test="recordClss != null and recordClss != ''">
+				record_clss,
+			</if>
+			<if test="recordMomey != null and recordMomey != ''">
+				record_momey,
+			</if>
+			<if test="recordTime != null and recordTime != ''">
+				record_time,
+			</if>
+			<if test="recordState != null and recordState != ''">
+				record_state,
+			</if>
+			<if test="handleTime != null and handleTime != ''">
+				handle_time,
+			</if>
+			<if test="userId != null and userId != ''">
+				user_id,
+			</if>
+			<if test="remark != null and remark != ''">
+				remark,
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				fback1,
+			</if>
+			<if test="accountId != null and accountId != ''">
+				account_id,
+			</if>
+			<if test="inorout != null and inorout != ''">
+				inorout,
+			</if>
+			<if test="caclss != null and caclss != ''">
+				caclss,
+			</if>
+			
+		</trim>
+	</sql>
+	<sql id="inserttables">
+		<trim suffix="" suffixOverrides=",">
+			<if test="recordId != null and recordId != ''">
+				#{recordId},
+			</if>
+			<if test="recordClss != null and recordClss != ''">
+				#{recordClss},
+			</if>
+			<if test="recordMomey != null and recordMomey != ''">
+				#{recordMomey},
+			</if>
+			<if test="recordTime != null and recordTime != ''">
+				#{recordTime},
+			</if>
+			<if test="recordState != null and recordState != ''">
+				#{recordState},
+			</if>
+			<if test="handleTime != null and handleTime != ''">
+				#{handleTime},
+			</if>
+			<if test="userId != null and userId != ''">
+				#{userId},
+			</if>
+			<if test="remark != null and remark != ''">
+				#{remark},
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				#{fback1},
+			</if>
+			<if test="accountId != null and accountId != ''">
+				#{accountId},
+			</if>
+			<if test="inorout != null and inorout != ''">
+				#{inorout},
+			</if>
+			<if test="caclss != null and caclss != ''">
+				#{caclss},
+			</if>
+		</trim>
+	</sql>
+	<!--后台得到资金记录-->
+	<select id="hgetRecord" parameterType="java.util.Map" resultMap="tableWithDrawRecordMessage">
+		select <include refid="hsqlcoulms" /> from withDrawRecord a left join user b on a.user_id=b.user_id left join withdrawaccount c on a.account_id=c.account_id
+		where 1=1 
+		<if test="recordClss != null and recordClss != ''">
+			and a.record_clss=#{recordClss} 
+			<!-- <foreach collection="list" item="recordClss" index="index" open="(" close=")" separator=",">
+            	and record_clss in #{recordClss} 
+        	</foreach> -->
+		</if>
+		<if test="recordState != null and recordState != ''">
+			and a.record_state=#{recordState}    
+		</if>
+		<if test="accountId != null and accountId != ''">
+			and a.account_id=#{accountId}    
+		</if>
+		<if test="inorout != null and inorout != ''">
+			and a.inorout=#{inorout}    <!-- 1收入，2支出 -->
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and a.record_time &gt;=#{startTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and a.record_time &lt;=#{endTime} 
+		</if>
+		<if test="state != null and state != ''">
+			and a.record_state =#{state} 
+		</if>
+		<if test="userId != null and userId != ''">
+			and a.user_id =#{userId} 
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and a.fback1 = #{fback1} 
+		</if>
+		<if test="caclss != null and caclss != ''">
+			and a.caclss = #{caclss} 
+		</if>
+		<if test="phone != null and phone != ''">
+			and b.phone_number = #{phone} 
+		</if>
+		${limit}
+	</select>
+	<select id="hgetCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(a.user_id) from withDrawRecord a left join user b on a.user_id=b.user_id 
+		where 1=1 
+		<if test="recordClss != null and recordClss != ''">
+			and a.record_clss=#{recordClss} 
+			<!-- <foreach collection="list" item="recordClss" index="index" open="(" close=")" separator=",">
+            	and record_clss in #{recordClss} 
+        	</foreach> -->
+		</if>
+		<if test="recordState != null and recordState != ''">
+			and a.record_state=#{recordState}    
+		</if>
+		<if test="accountId != null and accountId != ''">
+			and a.account_id=#{accountId}    
+		</if>
+		<if test="inorout != null and inorout != ''">
+			and a.inorout=#{inorout}    <!-- 1收入，2支出 -->
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and a.record_time &gt;=#{startTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and a.record_time &lt;=#{endTime} 
+		</if>
+		<if test="state != null and state != ''">
+			and a.record_state =#{state} 
+		</if>
+		<if test="userId != null and userId != ''">
+			and a.user_id =#{userId} 
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and a.fback1 = #{fback1} 
+		</if>
+		<if test="caclss != null and caclss != ''">
+			and a.caclss = #{caclss} 
+		</if>
+		<if test="phone != null and phone != ''">
+			and b.phone_number = #{phone} 
+		</if>
+	</select>
+	<select id="hgetMoney" parameterType="java.util.Map" resultType="java.lang.Double">
+		select sum(a.record_momey) from withDrawRecord a left join user b on a.user_id=b.user_id 
+		where 1=1 
+		<if test="recordClss != null and recordClss != ''">
+			and a.record_clss=#{recordClss} 
+			<!-- <foreach collection="list" item="recordClss" index="index" open="(" close=")" separator=",">
+            	and record_clss in #{recordClss} 
+        	</foreach> -->
+		</if>
+		<if test="recordState != null and recordState != ''">
+			and a.record_state=#{recordState}    
+		</if>
+		<if test="accountId != null and accountId != ''">
+			and a.account_id=#{accountId}    
+		</if>
+		<if test="inorout != null and inorout != ''">
+			and a.inorout=#{inorout}    <!-- 1收入，2支出 -->
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and a.record_time &gt;=#{startTime} 
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and a.record_time &lt;=#{endTime} 
+		</if>
+		<if test="state != null and state != ''">
+			and a.record_state =#{state} 
+		</if>
+		<if test="userId != null and userId != ''">
+			and a.user_id =#{userId} 
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and a.fback1 = #{fback1} 
+		</if>
+		<if test="caclss != null and caclss != ''">
+			and a.caclss = #{caclss} 
+		</if>
+		<if test="phone != null and phone != ''">
+			and b.phone_number = #{phone} 
+		</if>
+	</select>
+	<update id="updateState" parameterType="java.util.Map">
+		update withDrawRecord set record_state=#{recordState} where record_id=#{recordId}
+	</update>
+</mapper>   
+
+
+
+

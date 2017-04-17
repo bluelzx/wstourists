@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 符号转义说明 &lt; < &gt; > &lt;&gt; <> &amp; & &apos; ' &quot; " <![CDATA[ 
+	这里写你的SQL或者符号 ]]> -->
+<mapper namespace="com.yj.ws.dao.SysRoleMapper">
+	<resultMap id="tableMapToModel" type="com.yj.ws.pojo.SysRole">
+		<result column="roleid" property="roleid" />
+		<result column="roleName" property="roleName" />
+		<result column="roleState" property="roleState" />
+		<result column="createTime" property="createTime" />
+		<result column="roleAddByUser" property="roleAddByUser" />
+		<result column="roleDelTime" property="roleDelTime" />
+		<result column="roleDelByUser" property="roleDelByUser" />
+	</resultMap>
+	<!--根据用户ID得到用户角色 -->
+	<select id="getRoleByUser" resultType="java.util.Map" parameterType="java.lang.Integer">
+		select <include refid="tbaleColumns" /> from sysrole where 1=1 
+	</select>
+	<sql id="tbaleColumns">
+		<trim suffix="" suffixOverrides=",">
+			roleid,roleName,roleState,createTime,roleAddByUser,roleDelTime,roleDelByUser,
+		</trim>
+	</sql>
+	<sql id="sqlColums">
+		
+	</sql>
+</mapper>
+
+

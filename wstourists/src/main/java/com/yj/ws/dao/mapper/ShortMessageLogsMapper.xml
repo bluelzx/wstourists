@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.ShortMessageLogsMapper">
+	<resultMap id="tableShortMessageToModel" type="com.yj.ws.pojo.ShortMessageLogs">
+		<id column="id" property="id" />
+		<id column="serial_number" property="serialNumber" />
+		<id column="tele_phone" property="telePhone" />
+		<id column="content" property="content" />
+		<id column="phino_clss" property="phinoClss" />
+		<id column="create_time" property="createTime" />
+		<id column="channel" property="channel" />
+	</resultMap>
+	<!-- 得到登录注册发短信次数-->
+	<select id="messageCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from shortMessageLogs where create_time =#{createTime} and phino_clss=1 and tele_phone=#{telePhone}
+	</select>
+	<insert id="insertMessage" parameterType="com.yj.ws.pojo.ShortMessageLogs">
+		<selectKey resultType="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into shortMessageLogs(serial_number,tele_phone,content,phino_clss,create_time,channel) values
+		(#{serialNumber},#{telePhone},#{content},#{phinoClss},#{createTime},#{channel})
+	</insert>
+	<update id="updateMessage" parameterType="java.lang.Long">
+		update shortMessageLogs set phino_clss=2 where id=#{messageId}
+	</update>
+</mapper>   
+
+
+
+

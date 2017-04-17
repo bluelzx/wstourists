@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yj.ws.dao.UserMapper">
+	<resultMap id="tableUserModel" type="com.yj.ws.pojo.User">
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="real_name" property="realName" />
+		<result column="phone_number" property="phoneNumber" />
+		<result column="qq_id" property="qqId" /> 
+		<result column="email_number" property="emailNumber" />
+		<result column="user_password" property="userPassword" />
+		<result column="user_sex" property="userSex" />
+		<result column="fans_number" property="fansNumber" />
+		<result column="play_total" property="playTotal" />
+		<result column="last_time" property="lastTime" />
+		<result column="last_ip" property="lastIp" />
+		<result column="total_money" property="totalMoney" />
+		<result column="frozen_fund" property="frozenFund" />
+		<result column="vip_level" property="vipLevel" />
+		<result column="vip_start" property="vipStart" />
+		<result column="vip_end" property="vipEnd" />
+		<result column="fback1" property="fback1" />
+		<result column="fback2" property="fback2" />
+		<result column="crate_date" property="crateDate" />
+		<result column="account_id" property="accountId" />
+		<result column="isjoin" property="isjoin" />
+		<result column="withdraw_total" property="withdrawTotal" />
+		<result column="parent_id" property="parentId" />
+		<result column="card_number" property="cardNumber" />
+		<result column="isdelete" property="isdelete" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="earn_money" property="earnMoney" />
+	</resultMap>
+	<sql id="sqlcoulms">
+		user_id,user_name,real_name,phone_number,qq_id,email_number,user_password,user_sex,fans_number,
+		play_total,last_time,last_ip,total_money,
+		frozen_fund,vip_level,DATE_FORMAT(vip_start,'%Y-%m-%d %H:%i:%s') vip_start,
+		DATE_FORMAT(vip_end,'%Y-%m-%d %H:%i:%s') vip_end,
+		fback1,fback2,DATE_FORMAT(crate_date,'%Y-%m-%d %H:%i:%s') crate_date,account_id,
+		isjoin,withdraw_total,
+		withdraw_total,parent_id,card_number,province,
+		city,earn_money
+	</sql>
+	<sql id="fanscoulms">
+		user_id userId,phone_number phoneNumber
+	</sql>
+	<!-- 判断手机与用户id -->
+	<select id="pdId" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(user_id) from user where user_id=#{userId} and phone_number=#{phone}
+	</select>
+	<select id="selectUser" resultMap="tableUserModel" parameterType="java.util.Map">
+		select <include refid="sqlcoulms" /> from user where 1=1
+			<if test="phone != null and phone != ''">
+				and phone_number=#{phone} 
+			</if>
+			<if test="userId != null and userId != ''">
+				and user_id=#{userId} 
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and crate_date &gt;=#{startTime} 
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and crate_date &lt;=#{endTime} 
+			</if>
+			<if test="hphone != null and hphone != ''">
+				and phone_number like CONCAT('%',#{hphone},'%') 
+			</if>
+			<if test="vipLevel != null and vipLevel != ''">
+				and vip_level =#{vipLevel}
+			</if>
+			<if test="othenPhone != null and othenPhone != ''">
+				and phone_number =#{othenPhone} 
+			</if>
+	</select>
+	<select id="selectUserBack" resultMap="tableUserModel" parameterType="java.util.Map">
+		select <include refid="sqlcoulms" /> from user where 1=1
+			<if test="phone != null and phone != ''">
+				and phone_number like CONCAT('%',#{phone},'%')
+			</if>
+			<if test="userId != null and userId != ''">
+				and user_id=#{userId} 
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and crate_date &gt;=#{startTime} 
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and crate_date &lt;=#{endTime} 
+			</if>
+			<if test="hphone != null and hphone != ''">
+				and phone_number =#{hphone} 
+			</if>
+			<if test="vipLevel != null and vipLevel != ''">
+				and vip_level =#{vipLevel}
+			</if>
+			${limit}
+	</select>
+	<select id="selectUserCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from user where 1=1
+			<if test="phone != null and phone != ''">
+				and phone_number like CONCAT('%',#{phone},'%')
+			</if>
+			<if test="userId != null and userId != ''">
+				and user_id=#{userId} 
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and crate_date &gt;=#{startTime} 
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and crate_date &lt;=#{endTime} 
+			</if>
+			<if test="hphone != null and hphone != ''">
+				and phone_number like CONCAT('%',#{hphone},'%') 
+			</if>
+			<if test="vipLevel != null and vipLevel != ''">
+				and vip_level =#{vipLevel}
+			</if>
+	</select>
+	<!--  useGeneratedKeys="true" keyProperty="userId" -->
+	<insert id="insertUser" parameterType="com.yj.ws.pojo.User">
+		<selectKey resultType="java.lang.Long" keyProperty="userId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into user(
+			<include refid="insertcoulms" />
+		)
+		values(
+			<include refid="inserttables" />
+		)
+	</insert>
+	<!-- 得到一级粉丝数目 -->
+	<select id="getfriends" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		select count(*) from user where parent_id=#{userId}
+	</select>
+	<!-- 得到二级粉丝数目 -->
+	<select id="getTwoFriendCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		select   count(*) from user where parent_id in 
+		(select user_id  from user WHERE parent_id=#{userId})
+	</select>
+	<!-- 一级粉丝 -->
+	<select id="getOnefriends" parameterType="java.util.Map" resultType="java.util.Map">
+		select <include refid="fanscoulms" /> from user where parent_id=#{userId}
+		${pageUtil.limit}
+	</select>
+	<!-- 二级粉丝 -->
+	<select id="getTwofriends" parameterType="java.util.Map" resultType="java.util.Map">
+		select   <include refid="fanscoulms" /> from user where parent_id in 
+		(select user_id  from user WHERE parent_id=#{userId})
+		${pageUtil.limit}
+	</select>
+	<select id="seacherFuns" parameterType="java.util.Map" resultMap="tableUserModel">
+		select <include refid="sqlcoulms" /> from user where 
+	</select>
+	<!-- 修改金额 -->
+	<!-- 一下金额分别是:总金额，充值总额，冻结金额，用户推荐获得金额，提现金额 -->
+	<update id="updateUserMoney" parameterType="com.yj.ws.pojo.User">
+		update user set <include refid="updateCoulm" /> where 1=1
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and phone_number=#{phoneNumber} 
+		</if>
+		<if test="userId != null and userId != ''">
+			and user_id=#{userId} 
+		</if>
+	</update>
+	<sql id="updateCoulm">
+		<trim suffix="" suffixOverrides=",">
+			<if test="totalMoney != null and totalMoney != ''">
+				 total_money=#{totalMoney},
+			</if>
+			<if test="playTotal != null and playTotal != ''">
+				 play_total=#{playTotal},
+			</if>
+			<if test="frozenFund != null and frozenFund != ''">
+				 frozen_fund=#{frozenFund},
+			</if>
+			<if test="earnMoney != null and earnMoney != ''">
+				 earn_money=#{earnMoney},
+			</if>
+			<if test="withdrawTotal != null and withdrawTotal != ''">
+				 withdraw_total=#{withdrawTotal},
+			</if>
+			<if test="fansNumber != null ">
+				 fans_number=#{fansNumber},
+			</if>
+			<if test="isjoin != null ">
+				 isjoin=#{isjoin},
+			</if>
+			
+			<if test="vipLevel != null and vipLevel != ''" >
+				 vip_level=#{vipLevel},
+			</if>
+				<if test="vipStart != null and vipStart != ''">
+				 vip_start=#{vipStart},
+			</if>
+			<if test="vipEnd != null and vipEnd != ''">
+				 vip_end=#{vipEnd},
+			</if>
+			<if test="parentId != null and parentId != ''">
+				 parent_id=#{parentId},
+			</if>
+			
+			<if test="fback2 != null and fback2 != ''">
+				 fback2=#{fback2},
+			</if>
+		</trim>
+	</sql>
+	
+	<sql id="insertcoulms">
+		<trim suffix="" suffixOverrides=",">
+			<if test="userName != null and userName != ''">
+				user_name,
+			</if>
+			<if test="realName != null and realName != ''">
+				real_name,
+			</if>
+			<if test="phoneNumber != null and phoneNumber != ''">
+				phone_number,
+			</if>
+			<if test="emailNumber != null and emailNumber != ''">
+				email_number,
+			</if>
+			<if test="userPassword != null and userPassword != ''">
+				user_password,
+			</if>
+			<if test="userSex != null and userSex != ''">
+				user_sex,
+			</if>
+			<if test="fansNumber != null and fansNumber != ''">
+				fans_number,
+			</if>
+			<if test="playTotal != null and playTotal != ''">
+				play_total,
+			</if>
+			<if test="frozenFund != null and frozenFund != ''">
+				frozen_fund,
+			</if>
+			<if test="vipLevel != null and vipLevel != ''">
+				vip_level,
+			</if>
+			<if test="vipStart != null and vipStart != ''">
+				vip_start,
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				fback1,
+			</if>
+			<if test="fback2 != null and fback2 != ''">
+				fback2,
+			</if>
+			<if test="crateDate != null and crateDate != ''">
+				crate_date,
+			</if>
+			<if test="accountId != null and accountId != ''">
+				account_id,
+			</if>
+			<if test="parentId != null and parentId != ''">
+				parent_id,
+			</if>
+			<if test="cardNumber != null and cardNumber != ''">
+				card_number,
+			</if>
+			<if test="isdelete != null and isdelete != ''">
+				isdelete,
+			</if>
+			<if test="province != null and province != ''">
+				province,
+			</if>
+			<if test="city != null and city != ''">
+				city,
+			</if>
+			<if test="earnMoney != null and earnMoney != ''">
+				earn_money,
+			</if>
+		</trim>
+	</sql>
+	<sql id="inserttables">
+		<trim suffix="" suffixOverrides=",">
+			<if test="userName != null and userName != ''">
+				#{userName},
+			</if>
+			<if test="realName != null and realName != ''">
+				#{realName},
+			</if>
+			<if test="phoneNumber != null and phoneNumber != ''">
+				#{phoneNumber},
+			</if>
+			<if test="emailNumber != null and emailNumber != ''">
+				#{emailNumber},
+			</if>
+			<if test="userPassword != null and userPassword != ''">
+				#{userPassword},
+			</if>
+			<if test="userSex != null and userSex != ''">
+				#{userSex},
+			</if>
+			<if test="fansNumber != null and fansNumber != ''">
+				#{fansNumber},
+			</if>
+			<if test="playTotal != null and playTotal != ''">
+				#{playTotal},
+			</if>
+			<if test="frozenFund != null and frozenFund != ''">
+				#{frozenFund},
+			</if>
+			<if test="vipLevel != null and vipLevel != ''">
+				#{vipLevel},
+			</if>
+			<if test="vipStart != null and vipStart != ''">
+				#{vipStart},
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				#{fback1},
+			</if>
+			<if test="fback2 != null and fback2 != ''">
+				#{fback2},
+			</if>
+			<if test="crateDate != null and crateDate != ''">
+				#{crateDate},
+			</if>
+			<if test="accountId != null and accountId != ''">
+				#{accountId},
+			</if>
+			<if test="parentId != null and parentId != ''">
+				#{parentId},
+			</if>
+			<if test="cardNumber != null and cardNumber != ''">
+				#{cardNumber},
+			</if>
+			<if test="isdelete != null and isdelete != ''">
+				#{isdelete},
+			</if>
+			<if test="province != null and province != ''">
+				#{province},
+			</if>
+			<if test="city != null and city != ''">
+				#{city},
+			</if>
+			<if test="earnMoney != null and earnMoney != ''">
+				#{earnMoney},
+			</if>
+		</trim>
+	</sql>
+</mapper>
+
+ 
+
+
+
+
+
+
+
+
+
+

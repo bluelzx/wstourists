@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.WithDrawAccountMapper">
+	<resultMap id="tableWithDrawAccountMessage" type="com.yj.ws.pojo.WithDrawAccount">
+		<id column="account_id" property="accountId" />
+		<id column="account_class" property="accountClass" />
+		<id column="account_time" property="accountTime" />
+		<id column="user_id" property="userId" />
+		<id column="card_number" property="cardNumber" />
+		<id column="isdelete" property="isdelete" />
+		<id column="remark" property="remark" />
+		<id column="fback1" property="fback1" />
+		<id column="real_name" property="realName" />
+	</resultMap>
+	<sql id="sqlcoulms">
+		account_id,account_class,account_time,user_id,card_number,isdelete,remark,fback1
+	</sql>
+	<!-- 得到最近一次 -->
+	<select id="selectLast" resultType="java.util.Map" parameterType="java.lang.Long">
+		select account_class carClass,card_number carCode,real_name name  
+		from withdrawaccount where user_id=#{userId} order by account_time DESC limit 1; 
+	</select>
+</mapper>   
+
+
+
+

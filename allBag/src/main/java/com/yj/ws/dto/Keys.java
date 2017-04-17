@@ -1,0 +1,16 @@
+package com.yj.ws.dto;
+
+public class Keys {
+	//合作身份者id，以2088开头的16位纯数字
+		public static final String DEFAULT_PARTNER = "2088011743558468";
+
+		//收款支付宝账号
+		public static final String DEFAULT_SELLER = "ningstech@163.com";
+
+		//商户私钥，自助生成
+		public static final String PRIVATE = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANfkY0JE5ZeopjzxIjwNBpvZUcz/TOcyNU3wKrBCTlUdqfg3mYaWhbmQon1RH1ao8mGgJz+Asc5BYIoq42h5xXJEmA7v1p7QatsJZau7GsBsAlCQiOUpXYz29UdEQhXCaLaGvz58/MTBgUteZSaKV+4KGxtH6YewqZQEJoJ3evk1AgMBAAECgYEAgqAAYqdXF0UGmFb59MWY2xFJijRqbnSVhfuriIwF40AYiEPz01gdvyJA/nvn70I3rVP+i1CtxHMQG2lJwPv0t0sWs1x9C2OJR7nERSW88oKhhCTxvXAgh0Kl4iZ9W9V7CLhra148KRIrx/o7z39Q7Uz4Tm4JW1MJv16zhTSo7L0CQQDzxFxjXFH13aTCCDE4AiQc2YtouNjUaTkHJTI0mKNQtfd/JhLrRJHvqxIt5lOnJenLmPrZ7ah37oFQw1h2YpV3AkEA4rnsE7WFnhzUpPBDSzgC0F6dW5PjffTrWSyFSjvkm1IpvplvrqvaR6WfItlJfW020+CCyoaQYoAqcxEfK4EBswJAMXKNgyJBBey19R4QTdoxVSDT5KRKZ5wIk2h6LK0hw8eFsucYQ10fdUxwXZsxMODB8ijQCdDpsZpR5P4bPbh1tQJBALSMdCf5zK7trJSwVBZpQyxlvA+6RFYAnQ5FOtuzuEfL9Tw3+czyQ3/8ry5UNIayWw/84IqhAAfAoo1BXD4LnKsCQQDYDDAgYrJbvaU4YQy0ED47aVMUAgukjLVfIRYkqQJq/xeb6DcV5R53wl+FvS1ybGqzJ4SfbZ93IrfgESdQTVqz";
+	   
+	   //支付宝默认公钥 ，请勿修改
+		public static final String PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
+
+}

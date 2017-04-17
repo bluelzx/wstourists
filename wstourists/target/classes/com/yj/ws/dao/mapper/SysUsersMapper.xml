@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 符号转义说明 &lt; < &gt; > &lt;&gt; <> &amp; & &apos; ' &quot; " <![CDATA[ 
+	这里写你的SQL或者符号 ]]> -->
+<mapper namespace="com.yj.ws.dao.SysUsersMapper">
+	<resultMap id="tableMapToModel" type="com.yj.ws.pojo.SysUsers">
+		<result column="userId" property="userId" />
+		<result column="username" property="userName" />
+		<result column="password" property="passWord" />
+		<result column="name" property="name" />
+		<result column="image_url" property="imageUrl" />
+		<result column="email" property="email" />
+		<result column="phone" property="phone" />
+		<result column="userState" property="userState" />
+		<result column="password_changed_date" property="passwordChange" />
+		<result column="email_changed_date" property="emailChange" />
+		<result column="last_login_date" property="lastLoginDate" />
+		<result column="last_activity_datee" property="lastActivityDat" />
+		<result column="last_lockout_date" property="lastLockoutDate" />
+		<result column="create_time" property="createTime" />
+		<result column="is_disable" property="isDisable" />
+		<result column="userRight" property="userRight" />
+		<result column="userRole" property="userRole" />
+	</resultMap>
+	<select id="loginUsers" resultType="com.yj.ws.pojo.SysUsers" parameterType="java.util.Map">
+		select <include refid="tbaleColumns" /> from sysuser where 1=1 and username=#{userName} and password=#{passWord}
+	</select>
+	<sql id="tbaleColumns">
+		<trim suffix="" suffixOverrides=",">
+			userId,username,password,name,image_url,email,phone,userState,password_changed_date,email_changed_date,last_login_date,last_activity_date,last_lockout_date,create_time,is_disable,
+			userRight,userRole,
+		</trim>
+	</sql>
+	<sql id="sqlColums">
+		
+	</sql>
+	<!-- 查看总用户数 -->
+	<select id="getUserCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from sysuser where 1=1 ${limit}
+	</select>
+	<select id="getQueryUser" resultMap="tableMapToModel" parameterType="java.util.Map">
+		select <include refid="tbaleColumns" /> from sysuser where 1=1 ${limit}
+	</select>
+</mapper>
+
+<!-- 
+	<sql id="andOtherAll">
+		<trim suffix="" suffixOverrides="," >
+			<if test="id != null and id != '' " >
+				and id =  #{id}
+		    </if>
+			<if test="username != null and username != '' " >
+				and username =  #{username}
+		    </if>
+		</trim>
+	</sql>
+ -->
+ 
+ 
+
+
+
+
+
+
+
+
+
+

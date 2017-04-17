@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <> like &apos;%${updateUser}%&apos;
+    &amp;        & CONCAT('%',#{title},'%')
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.IpsMapper">
+	<resultMap id="tableCityMessage" type="com.yj.ws.pojo.Ips">
+		<id column="id" property="id" />
+		<id column="phone" property="phone" />
+		<id column="ip" property="ip" />
+		<id column="fback1" property="fback1" />
+		<id column="times" property="times" />
+	</resultMap>
+	<select id="selectBytimes" resultType="com.yj.ws.pojo.Ips" parameterType="com.yj.ws.pojo.Ips">
+		select id,ip,fback1,times,phone from ips where ip=#{ip} and times &gt;=DATE_SUB(#{times},INTERVAL  2 HOUR)
+	</select>
+	<!-- 增加ip -->
+	<insert id="insertIps" parameterType="com.yj.ws.pojo.Ips">
+		insert into ips(
+			<include refid="insertcoulms" />
+		)
+		values(
+			<include refid="inserttables" />
+		)
+	</insert>
+	<update id="updateTimes" parameterType="com.yj.ws.pojo.Ips">
+		update ips set times=#{times} where id=#{id}
+	</update>
+	<sql id="insertcoulms">
+		<trim suffix="" suffixOverrides=",">
+			<if test="phone != null and phone != ''">
+				phone,
+			</if>
+			<if test="ip != null and ip != ''">
+				ip,
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				fback1,
+			</if>
+			<if test="times != null and times != ''">
+				times,
+			</if>
+		</trim>
+	</sql>
+	<sql id="inserttables">
+		<trim suffix="" suffixOverrides=",">
+			<if test="phone != null and phone != ''">
+				#{phone},
+			</if>
+			<if test="ip != null and ip != ''">
+				#{ip},
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				#{fback1},
+			</if>
+			<if test="times != null and times != ''">
+				#{times},
+			</if>
+		</trim>
+	</sql>
+	
+</mapper>   
+
+
+
+

@@ -1,0 +1,250 @@
+@charset "utf-8";
+/* CSS Document Author:snow*/
+body{
+	background:#f8f8f8;
+}
+.mainbox{
+	width:100%;
+	min-height:auto;
+}
+.mainbox h2{
+	color:#006bab;
+	line-height:35px;
+	font-size:14px;
+	margin:0 0 0 10px;
+}
+.infobox{
+	width:100%;
+	border:1px solid #d0d0d0;
+	background:#fff;
+	min-height:100px;
+	overflow:hidden;
+}
+.infobox .infotitle{
+	background:url(../image/h3bg.png) repeat-x;
+	height:33px;
+	width:100%;
+	line-height:33px;
+
+}
+.infobox h3{
+	margin:0 0 0 10px;
+}
+.infobox .infocontent{
+	padding:10px 20px;
+}
+.input_label{
+	vertical-align:middle;
+}
+.input_label2{
+	font-weight:bold;
+	vertical-align:middle;
+}
+.input_label3{
+	vertical-align:middle;
+	width:100px;
+	text-align:right;
+	display:inline-block;
+}
+.input_text{
+	background:#fff;
+	border:1px solid #ddd;
+	height:20px;
+	line-height:20px;
+	margin:10px 10px 10px 0;
+	width:150px;
+}
+.input_text2{
+	background:#fff;
+	border:1px solid #ddd;
+	height:20px;
+	line-height:20px;
+	margin:10px 10px 10px 0;
+	width:300px;
+}
+.select_s{
+	background:#fff;
+	border:1px solid #ddd;
+	width:156px;
+	height:26px;
+	line-height:26px;
+	margin:10px 10px 10px 0;
+}
+.wmax1000{
+	max-width:1250px;
+}
+.btn{
+	display:inline-block;
+	height:29px;
+	line-height:28px;
+	padding:0 30px;
+	cursor:pointer;
+	font-size:14px;
+}
+.btn_green{
+	border:1px solid #028f37;
+	background:url(../image/btn_green.png) repeat-x;
+	color:#fff;
+}
+a.btn_green{
+	color:#fff;
+}
+a.btn_green:hover{
+	color:#fff;
+}
+.btn_gray{
+	border:1px solid #d5d5d5;
+	background:url(../image/btn_gray.png) repeat-x;
+	color:#666;
+}
+a.btn_gray{
+	color:#666;
+}
+a.btn_gray:hover{
+	color:#666;
+}
+.tabstyle{
+	width:100%;
+	border-top:1px solid #d0d0d0;
+	border-left:1px solid #d0d0d0;
+	border-bottom:1px solid #d0d0d0;
+	margin:10px 0;
+}
+.tabstyle th,.tabstyle td{
+	height:30px;
+	line-height:30px;
+	border-right:1px solid #d0d0d0;
+	text-align:center;
+}
+.tabstyle th{
+	background:#eee;
+	font-weight:normal;
+	border-bottom:1px solid #d0d0d0;
+}
+.tabstyle .tab_even{
+	background:#f1f5fa;
+}
+
+.tabstyle2{
+	width:100%;
+	border-bottom:1px solid #d0d0d0;
+	border-left:1px solid #d0d0d0;
+	margin:10px 0;
+}
+.tabstyle2 td{
+	height:30px;
+	line-height:30px;
+	border-right:1px solid #d0d0d0;
+	text-align:center;
+	background:#eee;
+	width:120px;
+	border-top:1px solid #d0d0d0;
+}
+
+.pagination{
+	float:right;
+	margin-bottom:20px;
+}
+.pagebtn{
+	background:url(../image/page_btn.png) no-repeat;
+	display:inline-block;
+	text-align:center;
+	height:29px;
+	line-height:29px;
+	width:74px;
+	cursor:pointer;
+	float:left;
+	margin:0 0 0 20px;
+}
+.page_num{
+	float:left;
+	margin:0 0 0 20px;
+	height:29px;
+	line-height:29px;
+	font-size:14px;
+}
+.page_num a{
+	margin:0 10px;
+}
+.page_cur{
+	font-weight:bold;
+}
+.show_info{
+	width:220px;
+	overflow:hidden;
+	margin:10px 0;
+	float:left;
+}
+.show_info dt,.show_info dd{
+	float:left;
+}
+.msg_block{
+	width:100%;
+	margin:30px 0;
+	border:1px solid #d0d0d0;
+}
+.msg_block h4{
+	background:#eee;
+	height:30px;
+	line-height:30px;
+	border-bottom:1px solid #d0d0d0;
+	padding:0 0 0 20px;
+	font-weight:normal;
+}
+.msg_block .msg_content{
+	padding:0 0 0 20px;
+	height:30px;
+	line-height:30px;
+}
+.msg_block .msg_content span{
+	width:20%;
+	display:inline-block;
+}
+.form_dl{
+	overflow:hidden;
+	line-height:30px;
+	margin:10px 0;
+}
+.form_dl dt{
+	width:120px;
+	text-align:right;
+	float:left;
+}
+.form_dl dd{
+	float:left;
+}
+.form_dl dd .input_text{
+	margin:0 !important;
+}
+.a_oranger:hover{
+	text-decoration:underline;
+	color:#ffae00;
+}
+.col_red{
+	color:red;
+}
+.box_btn{
+	margin:50px 50px;
+}
+.w80{
+	width:80px !important;
+}
+
+/*提示*/
+.notification{
+	font-size: 12px;
+    margin: 0 0 0 5px;
+    padding: 5px 0 5px 32px;
+}
+.ni_error{
+	background:url(../../backstage/image/cross_icon.gif) 10px 50% no-repeat;
+	color: #C9282D;
+}
+.ni_success{
+	background:url(../../backstage/image/success_icon.gif) 10px 50% no-repeat;
+	color: #00AE42;
+}
+.ni_information{
+	background:url(../../backstage/image/information_icon.gif) 10px 50% no-repeat;
+	color: #4f5ae8;
+}

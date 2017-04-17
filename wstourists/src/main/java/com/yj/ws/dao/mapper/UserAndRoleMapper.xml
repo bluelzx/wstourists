@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 符号转义说明 &lt; < &gt; > &lt;&gt; <> &amp; & &apos; ' &quot; " <![CDATA[ 
+	这里写你的SQL或者符号 ]]> -->
+<mapper namespace="com.yj.ws.dao.UserAndRoleMapper">
+	<resultMap id="tableMapToModel" type="com.yj.ws.pojo.UserAndRole">
+		<result column="id" property="id" />
+		<result column="userId" property="userId" />
+		<result column="roleId" property="roleId" />
+	</resultMap>
+	<!--根据用户ID得到用户角色 ID-->
+	<select id="getRoleByUser" resultType="java.util.Map" parameterType="java.lang.Integer">
+		select <include refid="tbaleColumns" /> from userAndRole where 1=1 and userId=#{userId}
+	</select>
+	<!-- 得到有用的角色ID -->
+	<select id="getRoleIdUse" resultMap="tableMapToModel" parameterType="java.lang.Integer">
+		SELECT ru.id,ru.roleId,ru.userId from userandrole ru LEFT JOIN sysrole sr on ru.roleId=sr.roleid where
+		sr.roles_tate=0 and ru.userId=#{userId}
+	</select>
+	<sql id="tbaleColumns">
+		<trim suffix="" suffixOverrides=",">
+			id,userId,roleId,
+		</trim>
+	</sql>
+	<sql id="sqlColums">
+		
+	</sql>
+</mapper>
+
+

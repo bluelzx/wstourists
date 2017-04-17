@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <> like &apos;%${updateUser}%&apos;
+    &amp;        & CONCAT('%',#{title},'%')
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.CityMapper">
+	<resultMap id="tableCityMessage" type="com.yj.ws.pojo.City">
+		<id column="id" property="id" />
+		<id column="cityID" property="cityId" />
+		<id column="city" property="city" />
+		<id column="father" property="father" />
+	</resultMap>
+	<!-- 查看所有省 -->
+	<select id="selectProve" resultType="java.util.Map">
+		select cityId provinceId,city from city where father=1
+	</select>
+	<!-- 根据省得到市 -->
+	<select id="selectCityByProce" resultType="com.yj.ws.pojo.City" parameterType="java.lang.Integer">
+		select cityID,city from city  where father=#{proceId}
+	</select>
+	<!-- 根据名字得到城市編碼 -->
+	<select id="getCityId" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select cityId from city where city like  CONCAT(#{city},'%')
+	</select>
+</mapper>   
+
+
+
+

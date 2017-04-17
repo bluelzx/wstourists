@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.SignUserMapper">
+	<resultMap id="tableSignUserMessage" type="com.yj.ws.pojo.SignUser">
+		<id column="sign_id" property="signId" />
+		<id column="user_id" property="userId" />
+		<id column="sign_time" property="signTime" />
+		<id column="sign_total" property="signTotal" />
+		<id column="remark" property="remark" />
+		<id column="fback1" property="fback1" />
+	</resultMap>
+	<sql id="sqlcoulms">
+		sign_id,user_id,DATE_FORMAT(sign_time,'%Y-%m-%d %H:%i:%s') sign_time,sign_total,remark,fback1
+	</sql>
+	<!-- 根据条件得到签到总数 -->
+	<select id="selectSignCount" resultType="java.lang.Integer" parameterType="com.yj.ws.pojo.SignUser">
+		select count(sign_id) from signUser where 1=1 
+		<if test="userId != null and userId != ''">
+			and user_id=#{userId}
+		</if>
+		<if test="signTotal != null  and signTotal != '' ">
+			and sign_total=#{signTotal}
+		</if>
+		<if test="signTime != null and signTime != ''">
+			and sign_time &lt;=#{signTime}
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and fback1 =#{fback1}
+		</if>
+	</select>
+	<!-- 根据条件得到签到总数 -->
+	<select id="selectSignTotal" resultType="com.yj.ws.pojo.SignUser" parameterType="com.yj.ws.pojo.SignUser">
+		select  <include refid="sqlcoulms" /> from signUser where 1=1 
+		<if test="userId != null and userId != ''">
+			and user_id=#{userId}
+		</if>
+		<if test="signTotal != null  and signTotal != '' ">
+			and sign_total=#{signTotal}
+		</if>
+		<if test="signTime != null and signTime != ''">
+			and sign_time=#{signTime}
+		</if>
+		<if test="fback1 != null and fback1 != ''">
+			and fback1=#{fback1}
+		</if>
+	</select>
+	<select id="selectSign" resultType="com.yj.ws.pojo.SignUser" parameterType="java.util.Map">
+		select <include refid="sqlcoulms" /> from signUser where user_id=#{userId}
+		<if test="signTotal != null and signTotal != ''">
+			and sign_total=#{signTotal}
+		</if>
+		<if test="limitTimes != null and limitTimes != ''">
+			limit 0,#{limitTimes}
+		</if>
+		order by sign_time desc
+	</select>
+	<!-- 签到 -->
+	<insert id="inserSign" parameterType="com.yj.ws.pojo.SignUser">
+		insert into signUser(
+			<include refid="insertcoulms" />
+		) values(
+			<include refid="inserttables" />
+		)
+	</insert>
+	<!-- 修改签到标签，当五次，增加标签标记为2 -->
+	<update id="updateSign" parameterType="java.lang.Long">
+		update signUser set sign_total=2 where 
+		 user_id=#{userId} 
+	</update>
+	<sql id="insertcoulms">
+		<trim suffix="" suffixOverrides=",">
+			<if test="signId != null and signId != ''">
+				sign_id,
+			</if>
+			<if test="userId != null and userId != ''">
+				user_id,
+			</if>
+			<if test="signTime != null and signTime != ''">
+				sign_time,
+			</if>
+			<if test="signTotal != null and signTotal != ''">
+				sign_total,
+			</if>
+			<if test="remark != null and remark != ''">
+				remark,
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				fback1,
+			</if>
+		</trim>
+	</sql>
+	<sql id="inserttables">
+		<trim suffix="" suffixOverrides=",">
+			<if test="signId != null and signId != ''">
+				#{signId},
+			</if>
+			<if test="userId != null and userId != ''">
+				#{userId},
+			</if>
+			<if test="signTime != null and signTime != ''">
+				#{signTime},
+			</if>
+			<if test="signTotal != null and signTotal != ''">
+				#{signTotal},
+			</if>
+			<if test="remark != null and remark != ''">
+				#{remark},
+			</if>
+			<if test="fback1 != null and fback1 != ''">
+				#{fback1},
+			</if>
+		</trim>
+	</sql>
+</mapper>   
+
+
+
+

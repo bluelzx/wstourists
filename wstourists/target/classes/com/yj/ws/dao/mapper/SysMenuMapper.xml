@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 符号转义说明 &lt; < &gt; > &lt;&gt; <> &amp; & &apos; ' &quot; " <![CDATA[ 
+	这里写你的SQL或者符号 ]]> -->
+<mapper namespace="com.yj.ws.dao.SysMenuMapper">
+	<resultMap id="tableMapToModel" type="com.yj.ws.pojo.SysMenu">
+		<result column="menuId" property="menuId" />
+		<result column="menuTag" property="menuTag" />
+		<result column="menuName" property="menuName" />
+		<result column="menuURL" property="menuURL" />
+		<result column="menuIcon" property="menuIcon" /> 
+		<result column="menuFlag" property="menuFlag" />
+		<result column="menuMenuOpen" property="menuMenuOpen" />
+		<result column="menuMenuView" property="menuMenuView" />
+		<result column="menuTabPage" property="menuTabPage" />
+		<result column="menuOrder" property="menuOrder" />
+		<result column="menuRightFlag" property="menuRightFlag" />
+		<result column="menuData" property="menuData" />
+		<result column="menuLog" property="menuLog" />
+		<result column="isSecurity" property="isSecurity" />
+		<result column="pagename" property="pagename" />
+		<result column="menuUPRight" property="menuUPRight" />
+		<result column="branchField" property="branchField" />
+		<result column="partId" property="partId" />
+	</resultMap>
+	<select id="selectMenuOwer" resultMap="tableMapToModel" parameterType="java.util.Map">
+		SELECT DISTINCT sm.menuid,sm.menuTag,sm.menuName,sm.menuURL,sm.menuIcon,sm.menuFlag,sm.menuMenuOpen,sm.menuMenuView,
+		sm.menuTabPage,
+		sm.menuOrder,sm.menuRightFlag,sm.menuData,sm.menuLog,sm.isSecurity,sm.pagename,sm.menuUPRight,sm.branchField,sm.partId
+		FROM sysmenu AS sm LEFT JOIN sysrights AS sr ON sm.menuid= sr.rightsMenuId 
+		where sm.menuFlag=#{menuFlag} AND sr.rightsRoleId in (#{roles}) and sm.MenuMenuView=1 and sr.isRight=1 
+		and sr.rightsRoleOrUser=0 <include refid="sqlcoulms"/>
+	</select>
+	<sql id="tbaleColumns">
+		<trim suffix="" suffixOverrides=",">
+			menuid,menuTag,menuName,menuURL,menuIcon,menuFlag,menuMenuOpen,menuMenuView,
+			menuTabPage,menuOrder,menuRightFlag,menuData,menuLog,isSecurity,pagename,menuUPRight,branchField,partId,
+		</trim>
+	</sql>
+	<sql id="sqlcoulms">
+		<trim suffix="" suffixOverrides=",">
+			<if test="menuId != null and menuId != '' " >
+				and sm.partId=#{menuId},
+	    	</if>
+   	 </trim>
+	</sql>
+	<sql id="sqlColums">
+		
+	</sql>
+</mapper>
+
+<!-- 
+	<sql id="andOtherAll">
+		<trim suffix="" suffixOverrides="," >
+			<if test="id != null and id != '' " >
+				and id =  #{id}
+		    </if>
+			<if test="username != null and username != '' " >
+				and username =  #{username}
+		    </if>
+		</trim>
+	</sql>
+ -->
+ 
+ 
+
+
+
+
+
+
+
+
+
+

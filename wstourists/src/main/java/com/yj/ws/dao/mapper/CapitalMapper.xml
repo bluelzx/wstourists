@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.CapitalMapper">
+	<resultMap id="tableCapitalMessage" type="com.yj.ws.pojo.Capital">
+		<id column="cid" property="cid" />
+		<id column="cmoney" property="cmoney" />
+		<id column="caclss" property="caclss" />
+		<id column="remark" property="remark" />
+		<id column="best_class" property="bestClass" />
+		<id column="explains" property="explains" />
+	</resultMap>
+	<sql id="sqlcoulms">
+		cid,cmoney,caclss,remark,best_class,explains
+	</sql>
+	<!-- 根据类型得到金额 -->
+	<select id="selectCapital" resultType="com.yj.ws.pojo.Capital" parameterType="com.yj.ws.pojo.Capital">
+		select <include refid="sqlcoulms"/> from capital where 1=1
+		<if test="cmoney != null and cmoney != ''">
+			and cmoney=#{cmoney}
+		</if>
+		<if test="caclss != null and caclss != ''">
+			and caclss=#{caclss}
+		</if>
+		<if test="bestClass != null and bestClass != ''">
+			and best_class=#{bestClass}
+		</if>
+	</select>
+	
+</mapper>   
+
+
+
+
+
+
+
+

@@ -1,0 +1,41 @@
+/* CSS Document */
+
+*{  margin:0px; padding:0px; list-style:none; font-family:Arial, Helvetica, sans-serif; }
+a {blr:expression(this.Onfocus=this.blur());text-decoration:none; }
+a:link{text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+img{border:0px;}
+
+* { margin:0; padding:0; list-style:none; font-size:14px;}/*---该css reset仅用于demo，请自行换成适合您自己的css reset---*/
+html { height:100%;}
+body { height:100%; text-align:center;
+background:url(../images/login_bg_bg.jpg) center center no-repeat}
+
+
+.centerDiv { display:inline-block; zoom:1; *display:inline; vertical-align:middle; text-align:left;width:655px; height:312px;  background-image: url(../images/content_bg.png);
+ background-position:center center; background-repeat:no-repeat; 
+ padding:90px 0px 0px 0px ;
+ _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/content_bg.png');margin-top:150px; *margin-top:0px;}
+
+.hiddenDiv { height:100%; overflow:hidden; display:inline-block; width:1px; overflow:hidden; margin-left:-1px; zoom:1; *display:inline; *margin-top:-1px; _margin-top:0; vertical-align:middle;}
+
+.nr{ float:left;  width:300px ; display:inline; margin-left:120px; margin-top:21px; height:180px !important; *_height:190px; }
+.nr  li{line-height:35px; float:left; width:100%;}
+.nr  label{ width:60px; text-align:right; float:left; line-height:35px; font-size:14px; color:#333333;  }
+
+.nr input{ background:url(../images/input_bg.gif) repeat-x top; border:solid 1px #d3d3d5; height:23px; line-height:23px;vertical-align:10px;padding-left:3px;  width:210px; margin-top:4px;}
+
+.nr  li select{ width:215px; height:23px;line-height:23px;}
+.nr  .yzminput{ width:126px;}
+.nr  img{ vertical-align:4px;*+vertical-align:9px;*_vertical-align:9px; margin-left:5px;}
+
+.button{ float:left; margin-top:20px;}
+.button li{ margin-bottom:13px;padding-top:7px !important;*_padding-top:5px;}
+
+
+.right{ width:100%;margin-top:60px; text-align:center; float:left; }
+.right p img{ margin-bottom:8px;}
+.right p{ line-height:18px; font-size:12px;color:#666}
+
+

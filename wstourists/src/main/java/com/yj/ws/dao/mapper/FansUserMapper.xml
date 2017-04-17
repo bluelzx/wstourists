@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+ <!-- 
+<trim suffix="" suffixOverrides=",">
+			#{id},#{menuName},#{content},#{createTime,jdbcType=TIMESTAMP},#{createUser},
+		</trim>
+ -->
+<mapper namespace="com.yj.ws.dao.FansUserMapper">
+	<resultMap id="tableFansUserMessage" type="com.yj.ws.pojo.FansUser">
+		<id column="fans_id" property="fansId" />
+		<id column="fans_user_id" property="fansUserId" />
+		<id column="passive_user_id" property="passiveUserId" />
+		<id column="passive_phone" property="passivePhone" />
+		<id column="fans_time" property="fansTime" />
+		<id column="remark" property="remark" />
+		<id column="fback1" property="fback1" />
+		<id column="isdelete" property="isdelete" />
+	</resultMap>
+	<sql id="sqlcoulms">
+		fans_id,fans_user_id,passive_user_id,passive_phone,fans_time,remark,fback1,isdelete
+	</sql>
+	<insert id="insertFuns" parameterType="com.yj.ws.pojo.FansUser" >
+		insert into fansUser(fans_user_id,passive_user_id,passive_phone,fans_time,isdelete) select
+		#{fansUserId} fans_user_id,user_id passive_user_id,phone_number passive_phone,
+		#{fansTime} fans_time,2 isdelete  from user where user_id!=#{fansUserId} and user_id not in 
+		(select passive_user_id from fansUser where fans_user_id=#{fansUserId}) and isjoin=1 order by vip_level desc
+		 limit 0,#{fansNumber}
+	</insert>
+	<!-- 得到粉丝 -->
+	<select id="getFans" parameterType="java.util.Map" resultMap="tableFansUserMessage">
+		select <include refid="sqlcoulms" /> from fansUser where 1=1 
+		<if test="isdelete != null and isdelete != ''">
+			and isdelete=#{isdelete}
+		</if>
+		<if test="fansUserId != null and fansUserId != ''">
+			and fans_user_id=#{fansUserId}
+		</if>
+		<if test="passiveUserId != null and passiveUserId != ''">
+			and passive_user_id=#{passiveUserId}
+		</if>
+		<if test="passivePhone != null and passivePhone != ''">
+			and passive_phone=#{passivePhone}
+		</if>
+	</select>
+	<!-- 把粉丝状态改为2 -->
+	<update id="updateFans" parameterType="java.util.Map">
+		update fansUser set isdelete=1 where fans_user_id=#{fansUserId}
+	</update>
+</mapper>   
+
+
+
+
